@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Marker</title>
+    <!-- The callback parameter is required, so we use console.debug as a noop -->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDksCB5a7H4rYiGOGHuqzlRfHJir8gUOQM&callback=console.debug&libraries=maps,marker&v=beta"> -->
+    
+    </script>
+     <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script> -->
+     <script src="data.json"></script>
+    <link rel="stylesheet" href="./style.css"/>
+  </head>
+  <body>
+    <!-- <gmp-map  id ="map" center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID">
+      <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
+    </gmp-map> -->
+    <div id="map"></div>
+
+  <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDksCB5a7H4rYiGOGHuqzlRfHJir8gUOQM&callback=initMap&v=weekly"
+      defer
+    ></script>
+  <script>
+// This example creates a 2-pixel-wide red polyline showing the path of
+// the first trans-Pacific flight between Oakland, CA, and Brisbane,
+// Australia which was made by Charles Kingsford Smith.
+const labels = ['00:35','00:29','23:38','23:35','22:40','22:35','22:01','21:05','20:43','20:42','20:41','20:37','20:36','20:35','20:34','20:33','20:32','20:31','20:30','20:28','20:27','20:27','20:22','20:22','20:20','20:15','20:14','20:13','20:12','20:11','20:10','20:09','20:08','20:07','20:06','20:05','20:04','20:03','20:02','20:00','19:59','19:58','19:57','19:56','19:56','19:54','19:53','19:52','19:51','19:50','19:49','19:48','19:46','19:45','19:44','19:43','19:42','19:41','19:40','19:39','19:38','19:37','19:36','19:35','19:34','19:29','19:28','19:26','19:26','19:25','19:24','19:23','19:19','19:18','19:18','19:16','19:15','19:14','19:13','19:12','19:11','19:10','19:08','19:07','19:06','19:05','19:04','19:03','19:02','19:01','19:00','18:59','18:58','18:57','18:56','18:55','18:54','18:50','18:49','18:48','18:47','18:46','18:46','18:45','18:43','18:42','18:41','18:40','18:35','18:34','18:33','18:32','18:31','18:30','18:29','18:28','18:26','18:25','18:24','18:23','18:22','18:21','18:20','18:19','18:18','18:17','18:16','18:15','18:04','18:01','17:51','17:48','17:39','17:30','17:25','17:21','17:20','17:19','17:18','17:17','17:16','17:08','17:07','17:06','17:05','17:04','17:03','17:02','17:01','17:00','16:59','16:54','16:53','16:52','16:51','16:50','16:49','16:48','16:47','16:46','16:43','16:43','16:42','16:38','16:37','16:36','16:35','16:34','16:33','16:32','16:31','16:30','16:29','16:28','16:27','16:26','16:25','16:24','16:23','16:22','16:21','16:19','16:18','16:17','16:16','16:15','16:14','16:13','16:12','16:09','16:08','15:59','15:59','15:59','15:53','14:54','14:20','14:19','13:18','13:14','12:15','12:13','11:17','11:10','10:08','09:30','09:28','09:09','09:06','08:14','08:05','07:14','07:04','06:08','06:03','05:03','05:00','04:03','03:59','03:18','02:59','02:58','02:41','02:34','01:18','01:17','01:16','01:15','01:14','00:45','23:37']
+var labelIndex = 0;
+var markers = [
+{"latitude": '-23.6193914 ',"longitude": '-46.8714105 '},
+{"latitude": '-23.6194026 ',"longitude": '-46.87143 '},
+{"latitude": '-23.6193833 ',"longitude": '-46.871421 '},
+{"latitude": '-23.6194016 ',"longitude": '-46.8714795 '},
+{"latitude": '-23.6194112 ',"longitude": '-46.8715102 '},
+{"latitude": '-23.6193884 ',"longitude": '-46.8714103 '},
+{"latitude": '-23.6193945 ',"longitude": '-46.8714086 '},
+{"latitude": '-23.6193876 ',"longitude": '-46.8714055 '},
+{"latitude": '-23.6193829 ',"longitude": '-46.8712417 '},
+{"latitude": '-23.6195583 ',"longitude": '-46.8712445 '},
+{"latitude": '-23.619536 ',"longitude": '-46.8601222 '},
+{"latitude": '-23.602359 ',"longitude": '-46.8557154 '},
+{"latitude": '-23.5989968 ',"longitude": '-46.8483766 '},
+{"latitude": '-23.5993081 ',"longitude": '-46.8388648 '},
+{"latitude": '-23.5941687 ',"longitude": '-46.8279498 '},
+{"latitude": '-23.5909238 ',"longitude": '-46.8093939 '},
+{"latitude": '-23.5908204 ',"longitude": '-46.7983929 '},
+{"latitude": '-23.5926709 ',"longitude": '-46.7903108 '},
+{"latitude": '-23.5858749 ',"longitude": '-46.7715186 '},
+{"latitude": '-23.5830483 ',"longitude": '-46.7597666 '},
+{"latitude": '-23.5860376 ',"longitude": '-46.7451371 '},
+{"latitude": '-23.5844722 ',"longitude": '-46.7094622 '},
+{"latitude": '-23.572645 ',"longitude": '-46.7094807 '},
+{"latitude": '-23.5726112 ',"longitude": '-46.7061196 '},
+{"latitude": '-23.5734681 ',"longitude": '-46.6967387 '},
+{"latitude": '-23.5725571 ',"longitude": '-46.6965827 '},
+{"latitude": '-23.5726094 ',"longitude": '-46.6964988 '},
+{"latitude": '-23.5731941 ',"longitude": '-46.6961388 '},
+{"latitude": '-23.573318 ',"longitude": '-46.6960036 '},
+{"latitude": '-23.5734149 ',"longitude": '-46.6959956 '},
+{"latitude": '-23.5734033 ',"longitude": '-46.696125 '},
+{"latitude": '-23.5732258 ',"longitude": '-46.6960992 '},
+{"latitude": '-23.5733129 ',"longitude": '-46.6962016 '},
+{"latitude": '-23.5730581 ',"longitude": '-46.696137 '},
+{"latitude": '-23.5730619 ',"longitude": '-46.6962279 '},
+{"latitude": '-23.5730461 ',"longitude": '-46.6960066 '},
+{"latitude": '-23.5728825 ',"longitude": '-46.6959166 '},
+{"latitude": '-23.5729018 ',"longitude": '-46.695945 '},
+{"latitude": '-23.5728974 ',"longitude": '-46.6959563 '},
+{"latitude": '-23.5728578 ',"longitude": '-46.6960221 '},
+{"latitude": '-23.5728693 ',"longitude": '-46.6959865 '},
+{"latitude": '-23.5728775 ',"longitude": '-46.6961867 '},
+{"latitude": '-23.5725979 ',"longitude": '-46.6961996 '},
+{"latitude": '-23.5726001 ',"longitude": '-46.6962017 '},
+{"latitude": '-23.5725277 ',"longitude": '-46.6962005 '},
+{"latitude": '-23.5725879 ',"longitude": '-46.6960744 '},
+{"latitude": '-23.5728371 ',"longitude": '-46.6961956 '},
+{"latitude": '-23.5730885 ',"longitude": '-46.6961653 '},
+{"latitude": '-23.572667 ',"longitude": '-46.6963239 '},
+{"latitude": '-23.5723461 ',"longitude": '-46.6961598 '},
+{"latitude": '-23.5723313 ',"longitude": '-46.6961499 '},
+{"latitude": '-23.5722573 ',"longitude": '-46.6960459 '},
+{"latitude": '-23.5722887 ',"longitude": '-46.6960017 '},
+{"latitude": '-23.5722919 ',"longitude": '-46.6961378 '},
+{"latitude": '-23.5726409 ',"longitude": '-46.6961295 '},
+{"latitude": '-23.5729525 ',"longitude": '-46.6961873 '},
+{"latitude": '-23.573038 ',"longitude": '-46.6959172 '},
+{"latitude": '-23.5729686 ',"longitude": '-46.6956883 '},
+{"latitude": '-23.5724892 ',"longitude": '-46.6958258 '},
+{"latitude": '-23.5720867 ',"longitude": '-46.6961167 '},
+{"latitude": '-23.5724316 ',"longitude": '-46.696367 '},
+{"latitude": '-23.5722828 ',"longitude": '-46.6963951 '},
+{"latitude": '-23.5722933 ',"longitude": '-46.6960858 '},
+{"latitude": '-23.5727553 ',"longitude": '-46.6961196 '},
+{"latitude": '-23.5727412 ',"longitude": '-46.6961076 '},
+{"latitude": '-23.5728452 ',"longitude": '-46.6961823 '},
+{"latitude": '-23.5728319 ',"longitude": '-46.6961307 '},
+{"latitude": '-23.572839 ',"longitude": '-46.696128 '},
+{"latitude": '-23.5728227 ',"longitude": '-46.696128 '},
+{"latitude": '-23.5728227 ',"longitude": '-46.6961431 '},
+{"latitude": '-23.5728912 ',"longitude": '-46.6954688 '},
+{"latitude": '-23.5726684 ',"longitude": '-46.6953925 '},
+{"latitude": '-23.5726591 ',"longitude": '-46.6961447 '},
+{"latitude": '-23.5726943 ',"longitude": '-46.6953706 '},
+{"latitude": '-23.5726596 ',"longitude": '-46.696189 '},
+{"latitude": '-23.5730266 ',"longitude": '-46.6962406 '},
+{"latitude": '-23.572991 ',"longitude": '-46.6962711 '},
+{"latitude": '-23.5730217 ',"longitude": '-46.6963092 '},
+{"latitude": '-23.5730254 ',"longitude": '-46.6962791 '},
+{"latitude": '-23.5730162 ',"longitude": '-46.6962689 '},
+{"latitude": '-23.5730065 ',"longitude": '-46.696282 '},
+{"latitude": '-23.5730169 ',"longitude": '-46.6962955 '},
+{"latitude": '-23.5729891 ',"longitude": '-46.6963692 '},
+{"latitude": '-23.5726178 ',"longitude": '-46.6964076 '},
+{"latitude": '-23.572741 ',"longitude": '-46.6964068 '},
+{"latitude": '-23.5727291 ',"longitude": '-46.696415 '},
+{"latitude": '-23.5727199 ',"longitude": '-46.6963685 '},
+{"latitude": '-23.5726442 ',"longitude": '-46.696305 '},
+{"latitude": '-23.5725767 ',"longitude": '-46.6961581 '},
+{"latitude": '-23.5727267 ',"longitude": '-46.6958025 '},
+{"latitude": '-23.5728711 ',"longitude": '-46.695998 '},
+{"latitude": '-23.5729818 ',"longitude": '-46.6961323 '},
+{"latitude": '-23.572923 ',"longitude": '-46.6960034 '},
+{"latitude": '-23.5729796 ',"longitude": '-46.6962043 '},
+{"latitude": '-23.572675 ',"longitude": '-46.6958848 '},
+{"latitude": '-23.5722693 ',"longitude": '-46.6957278 '},
+{"latitude": '-23.5726814 ',"longitude": '-46.6957649 '},
+{"latitude": '-23.5728223 ',"longitude": '-46.6957942 '},
+{"latitude": '-23.5728689 ',"longitude": '-46.6954024 '},
+{"latitude": '-23.5729457 ',"longitude": '-46.6953205 '},
+{"latitude": '-23.5730631 ',"longitude": '-46.6955886 '},
+{"latitude": '-23.5728602 ',"longitude": '-46.6953208 '},
+{"latitude": '-23.5729701 ',"longitude": '-46.6955216 '},
+{"latitude": '-23.572908 ',"longitude": '-46.695593 '},
+{"latitude": '-23.572863 ',"longitude": '-46.6955724 '},
+{"latitude": '-23.5728499 ',"longitude": '-46.695626 '},
+{"latitude": '-23.5728397 ',"longitude": '-46.695578 '},
+{"latitude": '-23.5728483 ',"longitude": '-46.6955987 '},
+{"latitude": '-23.5728604 ',"longitude": '-46.6956209 '},
+{"latitude": '-23.5728617 ',"longitude": '-46.6955812 '},
+{"latitude": '-23.5728448 ',"longitude": '-46.6955897 '},
+{"latitude": '-23.572859 ',"longitude": '-46.6955981 '},
+{"latitude": '-23.5728562 ',"longitude": '-46.6956554 '},
+{"latitude": '-23.5728199 ',"longitude": '-46.6952532 '},
+{"latitude": '-23.5729114 ',"longitude": '-46.6952419 '},
+{"latitude": '-23.5729032 ',"longitude": '-46.6953149 '},
+{"latitude": '-23.5731142 ',"longitude": '-46.6952403 '},
+{"latitude": '-23.5729521 ',"longitude": '-46.6953908 '},
+{"latitude": '-23.5723707 ',"longitude": '-46.6955232 '},
+{"latitude": '-23.5722845 ',"longitude": '-46.6954184 '},
+{"latitude": '-23.5723769 ',"longitude": '-46.6955575 '},
+{"latitude": '-23.5728846 ',"longitude": '-46.6956727 '},
+{"latitude": '-23.5728615 ',"longitude": '-46.6956538 '},
+{"latitude": '-23.5728766 ',"longitude": '-46.6957153 '},
+{"latitude": '-23.573007 ',"longitude": '-46.695952 '},
+{"latitude": '-23.572985 ',"longitude": '-46.6961655 '},
+{"latitude": '-23.5730735 ',"longitude": '-46.6959396 '},
+{"latitude": '-23.5726317 ',"longitude": '-46.6961053 '},
+{"latitude": '-23.5725748 ',"longitude": '-46.6961858 '},
+{"latitude": '-23.5726038 ',"longitude": '-46.6961798 '},
+{"latitude": '-23.5726009 ',"longitude": '-46.6961283 '},
+{"latitude": '-23.5725704 ',"longitude": '-46.6961659 '},
+{"latitude": '-23.5725638 ',"longitude": '-46.6962074 '},
+{"latitude": '-23.5726283 ',"longitude": '-46.6962213 '},
+{"latitude": '-23.5726471 ',"longitude": '-46.6961732 '},
+{"latitude": '-23.5725772 ',"longitude": '-46.6961685 '},
+{"latitude": '-23.5725788 ',"longitude": '-46.6961599 '},
+{"latitude": '-23.572565 ',"longitude": '-46.696189 '},
+{"latitude": '-23.5726194 ',"longitude": '-46.6960862 '},
+{"latitude": '-23.5730179 ',"longitude": '-46.6961257 '},
+{"latitude": '-23.5730589 ',"longitude": '-46.6960423 '},
+{"latitude": '-23.5728847 ',"longitude": '-46.696032 '},
+{"latitude": '-23.5729149 ',"longitude": '-46.6960517 '},
+{"latitude": '-23.5729046 ',"longitude": '-46.6960653 '},
+{"latitude": '-23.5729104 ',"longitude": '-46.6961272 '},
+{"latitude": '-23.5728674 ',"longitude": '-46.6962201 '},
+{"latitude": '-23.5728656 ',"longitude": '-46.6962168 '},
+{"latitude": '-23.5730742 ',"longitude": '-46.696245 '},
+{"latitude": '-23.5730468 ',"longitude": '-46.6960345 '},
+{"latitude": '-23.5725888 ',"longitude": '-46.6961961 '},
+{"latitude": '-23.5725956 ',"longitude": '-46.6962064 '},
+{"latitude": '-23.5726225 ',"longitude": '-46.6961046 '},
+{"latitude": '-23.573008 ',"longitude": '-46.6961225 '},
+{"latitude": '-23.5730704 ',"longitude": '-46.6960922 '},
+{"latitude": '-23.5731125 ',"longitude": '-46.6961336 '},
+{"latitude": '-23.5731636 ',"longitude": '-46.6962763 '},
+{"latitude": '-23.5732342 ',"longitude": '-46.6964932 '},
+{"latitude": '-23.5731767 ',"longitude": '-46.6966853 '},
+{"latitude": '-23.5725378 ',"longitude": '-46.6967285 '},
+{"latitude": '-23.5725386 ',"longitude": '-46.6966131 '},
+{"latitude": '-23.5727514 ',"longitude": '-46.6965976 '},
+{"latitude": '-23.5725466 ',"longitude": '-46.6972486 '},
+{"latitude": '-23.5730213 ',"longitude": '-46.6964717 '},
+{"latitude": '-23.5731314 ',"longitude": '-46.6969467 '},
+{"latitude": '-23.5741092 ',"longitude": '-46.6955275 '},
+{"latitude": '-23.5734933 ',"longitude": '-46.6949575 '},
+{"latitude": '-23.573668 ',"longitude": '-46.6955323 '},
+{"latitude": '-23.5716895 ',"longitude": '-46.69872 '},
+{"latitude": '-23.5724207 ',"longitude": '-46.7046435 '},
+{"latitude": '-23.5724349 ',"longitude": '-46.7074831 '},
+{"latitude": '-23.5747834 ',"longitude": '-46.7075627 '},
+{"latitude": '-23.5748491 ',"longitude": '-46.7107014 '},
+{"latitude": '-23.5734907 ',"longitude": '-46.7126499 '},
+{"latitude": '-23.5741673 ',"longitude": '-46.7244306 '},
+{"latitude": '-23.577638 ',"longitude": '-46.7312822 '},
+{"latitude": '-23.5820685 ',"longitude": '-46.7445737 '},
+{"latitude": '-23.5852469 ',"longitude": '-46.755703 '},
+{"latitude": '-23.5858708 ',"longitude": '-46.7656864 '},
+{"latitude": '-23.5858444 ',"longitude": '-46.7841524 '},
+{"latitude": '-23.5836086 ',"longitude": '-46.7969666 '},
+{"latitude": '-23.5907124 ',"longitude": '-46.8232231 '},
+{"latitude": '-23.5899995 ',"longitude": '-46.8322764 '},
+{"latitude": '-23.5904738 ',"longitude": '-46.83351 '},
+{"latitude": '-23.5920704 ',"longitude": '-46.8385527 '},
+{"latitude": '-23.5955705 ',"longitude": '-46.8406483 '},
+{"latitude": '-23.5970485 ',"longitude": '-46.8496586 '},
+{"latitude": '-23.5984308 ',"longitude": '-46.8587445 '},
+{"latitude": '-23.5973509 ',"longitude": '-46.8600324 '},
+{"latitude": '-23.6010269 ',"longitude": '-46.8685915 '},
+{"latitude": '-23.6144601 ',"longitude": '-46.8711136 '},
+{"latitude": '-23.6195785 ',"longitude": '-46.871743 '},
+{"latitude": '-23.6194896 ',"longitude": '-46.8716159 '},
+{"latitude": '-23.6194787 ',"longitude": '-46.8714227 '},
+{"latitude": '-23.619412 ',"longitude": '-46.8714664 '},
+{"latitude": '-23.6193384 ',"longitude": '-46.8713993 '},
+{"latitude": '-23.6193848 ',"longitude": '-46.8714205 '},
+{"latitude": '-23.6193766 ',"longitude": '-46.8714012 '},
+{"latitude": '-23.6193726 ',"longitude": '-46.8714778 '},
+{"latitude": '-23.6193566 ',"longitude": '-46.8713988 '},
+{"latitude": '-23.6193838 ',"longitude": '-46.8714558 '},
+{"latitude": '-23.6194352 ',"longitude": '-46.8714016 '},
+{"latitude": '-23.6193934 ',"longitude": '-46.8714821 '},
+{"latitude": '-23.6194236 ',"longitude": '-46.8714006 '},
+{"latitude": '-23.6193973 ',"longitude": '-46.8714022 '},
+{"latitude": '-23.6194 ',"longitude": '-46.8713951 '},
+{"latitude": '-23.6193279 ',"longitude": '-46.8714082 '},
+{"latitude": '-23.6193909 ',"longitude": '-46.8716074 '},
+{"latitude": '-23.6193513 ',"longitude": '-46.8714073 '},
+{"latitude": '-23.6194004 ',"longitude": '-46.8715029 '},
+{"latitude": '-23.619542 ',"longitude": '-46.871415 '},
+{"latitude": '-23.6193929 ',"longitude": '-46.8714352 '},
+{"latitude": '-23.6193476 ',"longitude": '-46.8714059 '},
+{"latitude": '-23.6193921 ',"longitude": '-46.8714208 '},
+{"latitude": '-23.6194463 ',"longitude": '-46.8714029 '},
+{"latitude": '-23.6193966 ',"longitude": '-46.8715174 '},
+{"latitude": '-23.6193936 ',"longitude": '-46.871401 '},
+{"latitude": '-23.619395 ',"longitude": '-46.8714547 '},
+{"latitude": '-23.6193663 ',"longitude": '-46.8714052 '},
+{"latitude": '-23.6193929 ',"longitude": '-46.8714121 '},
+{"latitude": '-23.6193919 ',"longitude": '-46.8714437 '},
+{"latitude": '-23.619376 ',"longitude": '-46.8714776 '},
+{"latitude": '-23.6193807 ',"longitude": '-46.8714196 '},
+{"latitude": '-23.6193949 ',"longitude": '-46.8714481 '},
+{"latitude": '-23.6194233 ',"longitude": '-46.8714112 '},
+{"latitude": '-23.6193933 ',"longitude": '-46.8714154 '},
+{"latitude": '-23.6194004 ',"longitude": '-46.8714231 '},
+{"latitude": '-23.6193978 ',"longitude": '-46.8714165 '},
+{"latitude": '-23.6193971 ',"longitude": '-46.8714068 '},
+{"latitude": '-23.6193955 ',"longitude": '-46.8714572 '},
+{"latitude": '-23.6193879 ',"longitude": '-46.871435 '},
+{"latitude": '-23.6193941 ',"longitude": '-46.8714131 '}
+];
+window.onload = function() {
+  var mapOptions = {
+    center: new google.maps.LatLng(markers[0].latitude, markers[0].longitude),
+    zoom: 10,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  
+  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  
+  var infoWindow = new google.maps.InfoWindow();
+  var lat_lng = new Array();
+  var latlngbounds = new google.maps.LatLngBounds();
+  for (i = 0; i < markers.length; i++) {
+    var data = markers[i]
+    var myLatlng = new google.maps.LatLng(data.latitude, data.longitude);
+    lat_lng.push(myLatlng);
+    var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      //criacao das labels dos marcadores
+      label: ''+labelIndex+': '+labels[labelIndex++ % labels.length],
+      //title: data.timestamp
+    });
+    // console.log(i)
+
+    latlngbounds.extend(marker.position);
+    (function(marker, data) {
+      google.maps.event.addListener(marker, "click", function(e) {
+       //infoWindow.setContent(data.timestamp);
+        //infoWindow.open(map, marker);
+        
+      });
+    })(marker, data);
+  }
+  map.setCenter(latlngbounds.getCenter());
+  map.fitBounds(latlngbounds);
+
+  //***********ROUTING****************//
+
+
+  //Initialize the Direction Service
+  var service = new google.maps.DirectionsService();
+
+
+
+
+  //Loop and Draw Path Route between the Points on MAP
+  for (var i = 0; i < lat_lng.length; i++) {
+    if ((i + 1) < lat_lng.length) {
+      var src = lat_lng[i];
+      var des = lat_lng[i + 1];
+      // path.push(src);
+
+      service.route({
+        origin: src,
+        destination: des,
+        //modo de conducao usado
+        travelMode: google.maps.DirectionsTravelMode.DRIVING,
+        
+      }, function(result, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+
+
+          //Initialize the Path Array
+          var path = new google.maps.MVCArray();
+          //Set the Path Stroke Color
+          var poly = new google.maps.Polyline({
+            map: map,
+          //mudança de cor a cada roda criada
+            strokeColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0")
+
+          });
+          poly.setPath(path);
+          for (var i = 0, len = result.routes[0].overview_path.length; i < len; i++) {
+            path.push(result.routes[0].overview_path[i]);
+          }
+        }
+      });
+    }
+  }
+}
+
+function loadData() {
+    fetch('data.json',{method: "POST",mode: 'no-cors'},{headers: {
+    'Access-Control-Allow-Origin':'*'}})
+  .then(function(response) {
+    console.log(response)
+    return response.json();
+  })
+  .then(function(data) {
+    console.log(data)
+  });
+    
+    
+}
+
+// window.initMap = initMap;
+  </script>
+    </body>
+</html>
